@@ -1,0 +1,6 @@
+{
+  "name": "Bulls Art Studio",
+  "description": "Strategic brand architecture, industrial production, and precision architectural fabrication for corporate leaders, founders, and large institutions.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

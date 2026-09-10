@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://bullsartstudio.com/sitemap.xml
+Host: https://bullsartstudio.com
