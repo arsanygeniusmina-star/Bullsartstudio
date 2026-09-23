@@ -16,11 +16,10 @@ const navLinks = [
 ];
 
 interface NavbarProps {
-  onOpenAudit?: (tab?: 'seo' | 'eta' | 'perf') => void;
-  onNavigate404?: () => void;
+  className?: string;
 }
 
-export default function Navbar({ onOpenAudit, onNavigate404 }: NavbarProps) {
+export default function Navbar({ className = '' }: NavbarProps) {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState<string>('#who-we-are');
@@ -94,7 +93,7 @@ export default function Navbar({ onOpenAudit, onNavigate404 }: NavbarProps) {
   return (
     <>
       <header
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${className} ${
           scrolled
             ? 'bg-bulls-black/95 backdrop-blur-xl border-b border-bulls-border/90 shadow-[0_10px_30px_rgba(0,0,0,0.7)]'
             : 'bg-gradient-to-b from-bulls-black/90 to-transparent backdrop-blur-[2px]'
@@ -162,31 +161,6 @@ export default function Navbar({ onOpenAudit, onNavigate404 }: NavbarProps) {
                   01000119905
                 </span>
               </a>
-
-              {/* System Audit Trigger */}
-              {onOpenAudit && (
-                <button
-                  type="button"
-                  onClick={() => onOpenAudit('seo')}
-                  className="hidden xl:inline-flex items-center gap-1.5 px-3 py-2 bg-bulls-surface/80 hover:bg-bulls-surface border border-bulls-border hover:border-bulls-red text-bulls-muted hover:text-white font-mono text-[10px] tracking-wider uppercase transition-all duration-200 rounded-sm"
-                  aria-label="Open System Audit (SEO, ETA, Performance)"
-                  title="View live SEO, Production ETA & Performance audit"
-                >
-                  <span className="w-1.5 h-1.5 rounded-full bg-bulls-red" />
-                  <span>Audit Terminal</span>
-                </button>
-              )}
-
-              {onNavigate404 && (
-                <button
-                  type="button"
-                  onClick={onNavigate404}
-                  className="hidden 2xl:inline-flex items-center gap-1 px-2.5 py-1.5 border border-bulls-border text-bulls-hint hover:text-white text-[10px] font-mono uppercase transition-colors rounded-sm"
-                  title="Test custom 404 page"
-                >
-                  404
-                </button>
-              )}
 
               {/* Primary CTA */}
               <div className="hidden lg:block">
@@ -330,24 +304,6 @@ export default function Navbar({ onOpenAudit, onNavigate404 }: NavbarProps) {
                 </div>
                 <ArrowUpRight size={16} className="text-bulls-hint group-hover:text-white" />
               </a>
-
-              {/* Audit Trigger */}
-              {onOpenAudit && (
-                <button
-                  type="button"
-                  onClick={() => {
-                    setMenuOpen(false);
-                    onOpenAudit('seo');
-                  }}
-                  className="flex items-center justify-between p-3 bg-bulls-surface/60 border border-bulls-border text-bulls-muted hover:text-white font-mono text-xs uppercase tracking-wider rounded-sm transition-colors"
-                >
-                  <span className="flex items-center gap-2">
-                    <span className="w-1.5 h-1.5 rounded-full bg-bulls-red" />
-                    <span>System Audit (SEO · ETA · Perf)</span>
-                  </span>
-                  <span className="text-bulls-red font-bold font-mono">PASS 100%</span>
-                </button>
-              )}
 
               {/* Primary Contact Button */}
               <button

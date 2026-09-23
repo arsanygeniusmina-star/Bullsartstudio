@@ -3,7 +3,6 @@ import { AnimatePresence, motion } from 'framer-motion';
 import ScrollProgress from './components/ScrollProgress';
 import Navbar from './components/Navbar';
 import FadeInSection from './components/FadeInSection';
-import AuditModal from './components/AuditModal';
 import CustomCursor from './components/CustomCursor';
 import AnimatedBackground from './components/AnimatedBackground';
 import FloatingContact from './components/FloatingContact';
@@ -21,9 +20,6 @@ import CTABand from './sections/CTABand';
 import Contact from './sections/Contact';
 
 export default function App() {
-  const [auditOpen, setAuditOpen] = useState(false);
-  const [auditTab, setAuditTab] = useState<'seo' | 'eta' | 'perf'>('seo');
-  
   // Custom 404 page detection
   const [is404, setIs404] = useState(() => {
     const p = window.location.pathname;
@@ -39,11 +35,6 @@ export default function App() {
     return () => window.removeEventListener('popstate', handlePopState);
   }, []);
 
-  const handleOpenAudit = (tab: 'seo' | 'eta' | 'perf' = 'seo') => {
-    setAuditTab(tab);
-    setAuditOpen(true);
-  };
-
   const handleGoHome = () => {
     if (window.location.pathname !== '/') {
       window.history.pushState({}, '', '/');
@@ -52,21 +43,15 @@ export default function App() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  const handleNavigate404 = () => {
-    window.history.pushState({}, '', '/404');
-    setIs404(true);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
-
   return (
     <div className="min-h-screen bg-bulls-bg text-white overflow-x-hidden selection:bg-bulls-red/30 selection:text-white relative">
       {/* Interactive Custom Cursor with Springs */}
       <CustomCursor />
 
-      {/* Subtle Ambient Background Mesh & Grid */}
+      {/* Subtle Ambient Background Mesh & Glow */}
       <AnimatedBackground />
 
-      {/* Floating Fast Action Contact Dispatch */}
+      {/* Floating Quick Inquiry Contact Dispatch */}
       <FloatingContact />
 
       {/* Floating Back to Top Control */}
@@ -97,7 +82,7 @@ export default function App() {
             </a>
 
             <ScrollProgress />
-            <Navbar onOpenAudit={handleOpenAudit} onNavigate404={handleNavigate404} />
+            <Navbar />
 
             <ErrorBoundary>
               <main id="main-content">
@@ -128,12 +113,6 @@ export default function App() {
                 </FadeInSection>
               </main>
             </ErrorBoundary>
-
-            <AuditModal
-              isOpen={auditOpen}
-              onClose={() => setAuditOpen(false)}
-              defaultTab={auditTab}
-            />
           </motion.div>
         )}
       </AnimatePresence>
