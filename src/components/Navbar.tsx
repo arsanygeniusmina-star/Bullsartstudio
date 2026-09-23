@@ -24,27 +24,49 @@ export default function Navbar({ className = '' }: NavbarProps) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState<string>('#who-we-are');
 
-  // Track scroll position for navbar styling and active section
+  // Track scroll position for navbar styling and active section efficiently
   useEffect(() => {
-    const onScroll = () => {
-      setScrolled(window.scrollY > 40);
+    let ticking = false;
+    let cachedOffsets: { href: string; top: number }[] = [];
 
-      // Determine active section based on scroll position
-      const scrollPos = window.scrollY + 140;
-      for (let i = navLinks.length - 1; i >= 0; i--) {
-        const el = document.querySelector(navLinks[i].href);
-        if (el) {
-          const top = (el as HTMLElement).offsetTop;
-          if (scrollPos >= top) {
-            setActiveSection(navLinks[i].href);
-            break;
+    const updateOffsets = () => {
+      cachedOffsets = navLinks
+        .map((link) => {
+          const el = document.querySelector(link.href);
+          return el ? { href: link.href, top: (el as HTMLElement).offsetTop } : null;
+        })
+        .filter(Boolean) as { href: string; top: number }[];
+    };
+
+    updateOffsets();
+    window.addEventListener('resize', updateOffsets, { passive: true });
+
+    const onScroll = () => {
+      if (!ticking) {
+        ticking = true;
+        requestAnimationFrame(() => {
+          const scrollY = window.scrollY;
+          const isScrolled = scrollY > 40;
+          setScrolled((prev) => (prev !== isScrolled ? isScrolled : prev));
+
+          const scrollPos = scrollY + 140;
+          for (let i = cachedOffsets.length - 1; i >= 0; i--) {
+            if (scrollPos >= cachedOffsets[i].top) {
+              const currentHref = cachedOffsets[i].href;
+              setActiveSection((prev) => (prev !== currentHref ? currentHref : prev));
+              break;
+            }
           }
-        }
+          ticking = false;
+        });
       }
     };
 
     window.addEventListener('scroll', onScroll, { passive: true });
-    return () => window.removeEventListener('scroll', onScroll);
+    return () => {
+      window.removeEventListener('scroll', onScroll);
+      window.removeEventListener('resize', updateOffsets);
+    };
   }, []);
 
   // Lock body scroll when mobile menu is open

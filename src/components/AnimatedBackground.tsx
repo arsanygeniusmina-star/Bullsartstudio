@@ -1,6 +1,10 @@
 export default function AnimatedBackground() {
   return (
-    <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden" aria-hidden="true">
+    <div
+      className="fixed inset-0 pointer-events-none z-0 overflow-hidden"
+      style={{ transform: 'translateZ(0)' }}
+      aria-hidden="true"
+    >
       {/* Ambient Grid */}
       <div className="absolute inset-0 grid-bg-subtle opacity-50" />
 

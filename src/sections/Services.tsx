@@ -245,10 +245,17 @@ function Square3DOrbit({
   const selectedIndex = services.findIndex((s) => s.id === selectedService.id);
   const relatedIds = selectedService.relatedIds;
 
+  const containerRectRef = useRef<DOMRect | null>(null);
+
   // Handle pointer tracking for cinematic 3D perspective tilt (desktop with mouse only)
+  const handleMouseEnter = () => {
+    if (dims.isMobile) return;
+    containerRectRef.current = containerRef.current?.getBoundingClientRect() ?? null;
+  };
+
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (dims.isMobile) return; // Never block or calculate during mobile touch
-    const rect = containerRef.current?.getBoundingClientRect();
+    if (dims.isMobile) return;
+    const rect = containerRectRef.current ?? containerRef.current?.getBoundingClientRect();
     if (!rect) return;
     const nx = ((e.clientX - rect.left) / rect.width) * 2 - 1;
     const ny = ((e.clientY - rect.top) / rect.height) * 2 - 1;
@@ -256,6 +263,7 @@ function Square3DOrbit({
   };
 
   const handleMouseLeave = () => {
+    containerRectRef.current = null;
     pointerRef.current = { x: 0, y: 0 };
     setHoveredId(null);
     hoveredIdRef.current = null;
@@ -508,6 +516,7 @@ function Square3DOrbit({
           dims.isMobile ? 'h-[390px]' : dims.isTablet ? 'h-[460px]' : 'h-[540px]'
         }`}
         style={{ touchAction: 'pan-y' }}
+        onMouseEnter={handleMouseEnter}
         onMouseMove={handleMouseMove}
         onMouseLeave={handleMouseLeave}
       >
@@ -703,7 +712,7 @@ function Square3DOrbit({
                       hoveredIdRef.current = null;
                     }
                   }}
-                  className="absolute cursor-pointer flex flex-col items-center group select-none bg-transparent p-0 border-0 outline-none focus:outline-none transition-transform duration-75"
+                  className="absolute cursor-pointer flex flex-col items-center group select-none bg-transparent p-0 border-0 outline-none focus:outline-none"
                   style={{
                     willChange: 'transform, opacity',
                     touchAction: 'manipulation',

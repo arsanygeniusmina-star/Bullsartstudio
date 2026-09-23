@@ -528,7 +528,7 @@ export default function Gallery() {
   // Build click-aware DriftWall items
   const driftItems = useMemo(
     () =>
-      [...items, ...items].map((item) => ({
+      items.map((item) => ({
         image: item.src,
         title: item.client,
         href: undefined as string | undefined,
